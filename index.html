@@ -7,49 +7,82 @@
 <style>
   :root { --ink:#1b1b2f; --accent:#5b4bff; }
   * { box-sizing:border-box; }
-  body { margin:0; min-height:100vh; color:var(--ink);
+  body { margin:0; min-height:100vh; color:var(--ink); font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     background:radial-gradient(900px 500px at 10% -5%, #e4dcff 0%, transparent 60%),
                radial-gradient(800px 500px at 100% 30%, #d4f5e9 0%, transparent 60%),
                radial-gradient(800px 500px at 0% 80%, #ffe8d1 0%, transparent 60%), #f7f6fd; }
-  main { max-width:760px; margin:0 auto; padding:28px 14px 56px; display:flex; flex-direction:column; gap:28px; }
-  .card { position:relative; border-radius:22px; overflow:hidden; background:#fff;
-    box-shadow:0 2px 4px rgba(27,27,47,.05), 0 18px 40px -12px rgba(91,75,255,.25); border:1px solid rgba(91,75,255,.08); }
+  main { max-width:560px; margin:0 auto; padding:22px 18px 90px; display:flex; flex-direction:column; gap:34px; }
+  section { display:flex; flex-direction:column; gap:10px; }
+  h2 { margin:0; font-size:1.25rem; font-weight:800; letter-spacing:.02em; text-align:center; }
+  .sub { margin:-6px 0 0; text-align:center; font-size:.85rem; font-weight:600; color:var(--accent); letter-spacing:.04em; }
+  .card { position:relative; width:100%; border-radius:14px; overflow:hidden; background:#fff;
+    box-shadow:0 2px 4px rgba(27,27,47,.05), 0 12px 28px -12px rgba(91,75,255,.28); border:1px solid rgba(91,75,255,.1); }
   .card img { width:100%; display:block; }
-  .ph { aspect-ratio:4/5; display:flex; align-items:center; justify-content:center; font:600 1rem system-ui,sans-serif; color:#8a86b8;
+  .ph { aspect-ratio:4/5; display:flex; align-items:center; justify-content:center; font-weight:600; color:#8a86b8;
     background:repeating-linear-gradient(45deg,#f1effe,#f1effe 14px,#f7f6fd 14px,#f7f6fd 28px); }
   .locked { background:linear-gradient(135deg,#6a5cff,#00b894); }
   .locked .ph { background:linear-gradient(135deg,#7a6dff,#35c9a5); color:transparent; }
   .locked img { filter:blur(14px); transform:scale(1.08); }
-  .overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
-    padding:20px; text-align:center; color:#fff; background:rgba(20,16,60,.5); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
-  .lock { width:64px; height:64px; border-radius:50%; display:grid; place-items:center; font-size:28px;
+  .overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    padding:18px; text-align:center; color:#fff; background:rgba(20,16,60,.5); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
+  .lock { width:54px; height:54px; border-radius:50%; display:grid; place-items:center; font-size:24px;
     background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.4); }
-  .overlay p { margin:0; font:800 clamp(1.5rem,7vw,2.5rem)/1.12 system-ui,sans-serif; text-shadow:0 2px 14px rgba(0,0,0,.3); }
-  .btn { font:700 1.05rem system-ui,sans-serif; color:var(--ink); background:#fff; border-radius:999px; padding:14px 30px; text-decoration:none;
-    box-shadow:0 10px 24px -6px rgba(0,0,0,.4); transition:transform .15s, box-shadow .15s; }
-  .btn:hover { transform:translateY(-2px); box-shadow:0 14px 28px -6px rgba(0,0,0,.45); }
+  .overlay p { margin:0; font-weight:800; font-size:clamp(1.3rem,6.5vw,2rem); line-height:1.12; text-shadow:0 2px 14px rgba(0,0,0,.3); }
+  .btn { font-weight:700; font-size:1rem; color:var(--ink); background:#fff; border-radius:999px; padding:13px 28px; text-decoration:none;
+    box-shadow:0 10px 24px -6px rgba(0,0,0,.4); transition:transform .15s; }
+  .btn:hover { transform:translateY(-2px); }
   .btn:focus-visible { outline:3px solid #fff; outline-offset:3px; }
-  @media (prefers-reduced-motion:reduce) { .btn { transition:none; } }
+  /* scroll hint */
+  #hint { position:fixed; left:50%; bottom:16px; transform:translateX(-50%); display:flex; align-items:center; gap:6px;
+    background:var(--ink); color:#fff; font-size:.85rem; font-weight:600; padding:9px 16px; border-radius:999px;
+    box-shadow:0 8px 20px -6px rgba(0,0,0,.45); transition:opacity .3s; pointer-events:none; }
+  #hint span { display:inline-block; animation:bob 1.2s ease-in-out infinite; }
+  #hint.hide { opacity:0; }
+  @keyframes bob { 50% { transform:translateY(4px); } }
+  @media (prefers-reduced-motion:reduce) { #hint span { animation:none; } .btn { transition:none; } }
 </style>
 </head>
 <body>
 <main>
-  <div class="card">
-    <img src="image1.jpg" alt="Explanation" onerror="this.outerHTML='<div class=&quot;ph&quot;>image1.jpg goes here</div>'">
-  </div>
-
-  <div class="card">
-    <img src="image2.jpg" alt="Free image" onerror="this.outerHTML='<div class=&quot;ph&quot;>image2.jpg goes here</div>'">
-  </div>
-
-  <div class="card locked">
-    <img src="image3.jpg" alt="Locked bonus image" onerror="this.outerHTML='<div class=&quot;ph&quot;>.</div>'">
-    <div class="overlay">
-      <div class="lock" aria-hidden="true">🔒</div>
-      <p>THE MOST IMPORTANT TIPS</p>
-      <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdRNUNNKzhH3IVCOQ7oXP2-uYmJPs-QwKieIiUVpKWoMhI2sQ/viewform" target="_blank" rel="noopener">Download the app</a>
+  <section>
+    <h2>EXPLANATION</h2>
+    <div class="card">
+      <img src="image1.jpg" alt="Explanation" onerror="this.outerHTML='<div class=&quot;ph&quot;>image1.jpg goes here</div>'">
     </div>
-  </div>
+  </section>
+
+  <section>
+    <h2>TIPS TO EARN</h2>
+    <p class="sub">SAVE THIS IMAGE</p>
+    <div class="card">
+      <img src="image2.jpg" alt="Tips to earn" onerror="this.outerHTML='<div class=&quot;ph&quot;>image2.jpg goes here</div>'">
+    </div>
+  </section>
+
+  <section>
+    <h2>THE MOST IMPORTANT TIPS</h2>
+    <div class="card locked">
+      <img src="image3.jpg" alt="Locked bonus image" onerror="this.outerHTML='<div class=&quot;ph&quot;>.</div>'">
+      <div class="overlay">
+        <div class="lock" aria-hidden="true">🔒</div>
+        <p>THE MOST IMPORTANT TIPS</p>
+        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdRNUNNKzhH3IVCOQ7oXP2-uYmJPs-QwKieIiUVpKWoMhI2sQ/viewform" target="_blank" rel="noopener">Download the app</a>
+      </div>
+    </div>
+  </section>
 </main>
+
+<div id="hint" aria-hidden="true">Scroll down <span>↓</span></div>
+
+<script>
+  var hint = document.getElementById('hint');
+  function check() {
+    var atBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 80;
+    hint.classList.toggle('hide', atBottom);
+  }
+  window.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check);
+  window.addEventListener('load', check);
+</script>
 </body>
 </html>
